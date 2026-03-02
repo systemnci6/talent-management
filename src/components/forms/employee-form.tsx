@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Me } from "@/types/api";
+import { BranchSelect } from "@/components/selects/branch-select";
+import { DepartmentSelect } from "@/components/selects/department-select";
+import { PositionSelect } from "@/components/selects/position-select";
+import { GradeSelect } from "@/components/selects/grade-select";
+import { EmployeePicker } from "@/components/pickers/employee-picker";
 
 type EmployeeFormData = {
   id?: string;
@@ -115,37 +120,34 @@ export function EmployeeForm({
         />
       </Field>
 
-      <Field label="支店ID（仮）">
-        <input
-          className="border rounded p-2 w-full"
-          value={form.branchId}
-          onChange={(e) => setForm((v) => ({ ...v, branchId: e.target.value }))}
-        />
-      </Field>
+<Field label="支店">
+  <BranchSelect
+    value={form.branchId}
+    onChange={(value) => setForm((v) => ({ ...v, branchId: value, departmentId: "" }))}
+  />
+</Field>
 
-      <Field label="部署ID（仮）">
-        <input
-          className="border rounded p-2 w-full"
-          value={form.departmentId}
-          onChange={(e) => setForm((v) => ({ ...v, departmentId: e.target.value }))}
-        />
-      </Field>
+<Field label="部署">
+  <DepartmentSelect
+    branchId={form.branchId}
+    value={form.departmentId}
+    onChange={(value) => setForm((v) => ({ ...v, departmentId: value }))}
+  />
+</Field>
 
-      <Field label="役職ID（仮）">
-        <input
-          className="border rounded p-2 w-full"
-          value={form.positionId}
-          onChange={(e) => setForm((v) => ({ ...v, positionId: e.target.value }))}
-        />
-      </Field>
+<Field label="役職">
+  <PositionSelect
+    value={form.positionId}
+    onChange={(value) => setForm((v) => ({ ...v, positionId: value }))}
+  />
+</Field>
 
-      <Field label="等級ID（仮）">
-        <input
-          className="border rounded p-2 w-full"
-          value={form.gradeId}
-          onChange={(e) => setForm((v) => ({ ...v, gradeId: e.target.value }))}
-        />
-      </Field>
+<Field label="等級">
+  <GradeSelect
+    value={form.gradeId}
+    onChange={(value) => setForm((v) => ({ ...v, gradeId: value }))}
+  />
+</Field>
 
       <Field label="雇用区分">
         <select
@@ -169,21 +171,17 @@ export function EmployeeForm({
         />
       </Field>
 
-      <Field label="直属上長 社員ID（任意）">
-        <input
-          className="border rounded p-2 w-full"
-          value={form.managerEmployeeId}
-          onChange={(e) => setForm((v) => ({ ...v, managerEmployeeId: e.target.value }))}
-        />
-      </Field>
+<EmployeePicker
+  label="直属上長"
+  value={form.managerEmployeeId}
+  onChange={(value) => setForm((v) => ({ ...v, managerEmployeeId: value }))}
+/>
 
-      <Field label="メンター 社員ID（任意）">
-        <input
-          className="border rounded p-2 w-full"
-          value={form.mentorEmployeeId}
-          onChange={(e) => setForm((v) => ({ ...v, mentorEmployeeId: e.target.value }))}
-        />
-      </Field>
+<EmployeePicker
+  label="メンター"
+  value={form.mentorEmployeeId}
+  onChange={(value) => setForm((v) => ({ ...v, mentorEmployeeId: value }))}
+/>
 
       <Field label="在籍状態">
         <select
