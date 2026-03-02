@@ -2,6 +2,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Me } from "@/types/api";
 import { canCreateInterview } from "@/lib/permissions/can";
+import { createNotification } from "@/lib/services/notification-service";
 
 export async function createInterview(input: { me: Me; input: any }) {
   if (!canCreateInterview(input.me)) {
@@ -10,7 +11,6 @@ export async function createInterview(input: { me: Me; input: any }) {
 
   const supabase = createSupabaseServerClient();
 
-  // 1) 面談記録の作成
   const { data: created, error: createErr } = await supabase
     .from("interview_records")
     .insert({
@@ -34,21 +34,42 @@ export async function createInterview(input: { me: Me; input: any }) {
 
   if (createErr) throw createErr;
 
-  // 2) assignment（フォロー割当）の完了化（任意）
   if (created.assignment_id && input.input.autoCompleteAssignment) {
+    const { data: followupRow, error: followupErr } = await supabase
+      .from("followup_assignments")
+      .select("id, assignee_employee_id")
+      .eq("id", created.assignment_id)
+      .maybeSingle();
+
+    if (followupErr) throw followupErr;
+
     const { error: updErr } = await supabase
       .from("followup_assignments")
       .update({ status: "done" })
       .eq("id", created.assignment_id);
 
     if (updErr) throw updErr;
+
+    if (followupRow?.assignee_employee_id) {
+      await createNotification({
+        userEmployeeId: followupRow.assignee_employee_id,
+        type: "followup_completed",
+        title: "フォロー割当が完了しました",
+        body: "面談記録の登録により、フォロー割当が完了になりました。",
+        relatedTable: "followup_assignments",
+        relatedId: created.assignment_id,
+      });
+    }
   }
 
-  // 3) 通知生成（任意：最小なら省略でもOK）
-  // 例：対象社員に「面談記録が作成されました（本人公開の場合）」通知
-  // 例：HRに「フォロー完了」通知
-  // ここは運用に合わせてON/OFFできるようにするのが理想
-  // await createNotification(...)
+  await createNotification({
+    userEmployeeId: input.input.interviewerEmployeeId,
+    type: "interview_created",
+    title: "面談記録を登録しました",
+    body: "面談記録の保存が完了しました。",
+    relatedTable: "interview_records",
+    relatedId: created.id,
+  });
 
   return { id: created.id };
 }
