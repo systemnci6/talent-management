@@ -1,3 +1,4 @@
+// src/app/api/templates/[id]/route.ts
 import { NextResponse } from "next/server";
 import { requireAuthApi } from "@/lib/auth/require-auth-api";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -49,6 +50,35 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   } catch (e: any) {
     return NextResponse.json(
       { success: false, error: { code: "ERROR", message: e?.message ?? "更新に失敗しました" } },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+  try {
+    await requireAuthApi();
+    const supabase = createSupabaseServerClient();
+
+    // 子テーブルを先に削除
+    const { error: childErr } = await supabase
+      .from("annual_plan_template_events")
+      .delete()
+      .eq("template_id", params.id);
+
+    if (childErr) throw childErr;
+
+    const { error: parentErr } = await supabase
+      .from("annual_plan_templates")
+      .delete()
+      .eq("id", params.id);
+
+    if (parentErr) throw parentErr;
+
+    return NextResponse.json({ success: true, data: { id: params.id } });
+  } catch (e: any) {
+    return NextResponse.json(
+      { success: false, error: { code: "ERROR", message: e?.message ?? "削除に失敗しました" } },
       { status: 500 }
     );
   }
