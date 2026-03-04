@@ -8,11 +8,13 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
   const me = await requireAuth(); // { userId, employeeId, role, scopes... }
 
   return (
-    <div className="min-h-dvh flex">
+    <div className="flex min-h-dvh bg-gradient-to-br from-slate-100 via-white to-indigo-100">
       <AppSidebar me={me} />
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-1 flex-col">
         <AppHeader me={me} />
-        <main className="p-4">{children}</main>
+        <main className="flex-1 p-6 lg:p-8">
+          <div className="mx-auto w-full max-w-7xl">{children}</div>
+        </main>
       </div>
     </div>
   );

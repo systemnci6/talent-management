@@ -8,6 +8,8 @@ const items = [
   { href: "/settings/masters/positions", label: "役職マスタ" },
   { href: "/settings/masters/grades", label: "等級マスタ" },
   { href: "/settings/masters/qualifications", label: "資格マスタ" },
+  { href: "/settings/templates", label: "年間テンプレート" },
+  { href: "/settings/audit-logs", label: "監査ログ" },
 ];
 
 export default async function MastersPage() {

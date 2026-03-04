@@ -29,8 +29,13 @@ export async function getEmployees(input: GetEmployeesInput) {
     .select(
       `
       id,
+      user_id,
       employee_code,
       name,
+      email,
+      last_invited_at,
+      invited_by_employee_id,
+      inviter:invited_by_employee_id ( name ),
       status,
       branch_id,
       department_id,
@@ -41,7 +46,7 @@ export async function getEmployees(input: GetEmployeesInput) {
       departments:department_id ( name ),
       positions:position_id ( name ),
       grades:grade_id ( name )
-    `,
+      `,
       { count: "exact" }
     );
 
@@ -86,8 +91,12 @@ export async function getEmployees(input: GetEmployeesInput) {
   return {
     items: (data ?? []).map((row: any) => ({
       id: row.id,
+      userId: row.user_id,
       employeeCode: row.employee_code,
       name: row.name,
+      email: row.email ?? "",
+      lastInvitedAt: row.last_invited_at ?? null,
+      invitedByName: row.inviter?.name ?? "",
       branchName: row.branches?.name ?? "",
       departmentName: row.departments?.name ?? "",
       positionName: row.positions?.name ?? "",

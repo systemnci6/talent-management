@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Me } from "@/types/api";
+import { InviteEmployeeButton } from "@/components/employees/invite-employee-button";
 
 export async function EmployeeBasicPanel({
   me,
@@ -16,6 +17,7 @@ export async function EmployeeBasicPanel({
     .from("employees")
     .select(`
       id,
+      user_id,
       employee_code,
       name,
       email,
@@ -41,11 +43,20 @@ export async function EmployeeBasicPanel({
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="font-medium">基本情報</h2>
-        {canEdit && (
-          <Link className="underline text-sm" href={`/employees/${employeeId}/edit`}>
-            編集
-          </Link>
-        )}
+        <div className="flex gap-2">
+          {canEdit && (
+            <InviteEmployeeButton
+            employeeId={employeeId}
+            email={data.email ?? ""}
+            hasUserId={!!data.user_id}
+            />
+          )}
+          {canEdit && (
+            <Link className="underline text-sm" href={`/employees/${employeeId}/edit`}>
+              編集
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="border rounded p-4 space-y-2 text-sm">
