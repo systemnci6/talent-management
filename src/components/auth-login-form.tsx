@@ -1,32 +1,6 @@
-"use client";
-
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
-import { loginAction, type LoginFormState } from "@/app/login/actions";
-
-const initialState: LoginFormState = {
-  error: null,
-};
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-
+export function AuthLoginForm({ errorMessage }: { errorMessage: string | null }) {
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
-    >
-      {pending ? "ログイン中..." : "ログイン"}
-    </button>
-  );
-}
-
-export function AuthLoginForm() {
-  const [state, formAction] = useActionState(loginAction, initialState);
-
-  return (
-    <form className="mt-8 space-y-5" action={formAction}>
+    <form className="mt-8 space-y-5" action="/api/auth/login" method="post">
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           メールアドレス
@@ -58,13 +32,18 @@ export function AuthLoginForm() {
         />
       </div>
 
-      {state.error ? (
+      {errorMessage ? (
         <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-          {state.error}
+          {errorMessage}
         </p>
       ) : null}
 
-      <SubmitButton />
+      <button
+        type="submit"
+        className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+      >
+        ログイン
+      </button>
     </form>
   );
 }
