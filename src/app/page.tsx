@@ -1,44 +1,68 @@
 import Link from "next/link";
+import { Card, CardText, CardTitle } from "@/components/ui/card";
 
 const quickLinks = [
-  { href: "/login", label: "ログイン", description: "セキュアにサインイン" },
-  { href: "/dashboard", label: "ダッシュボード", description: "全体状況を俯瞰" },
-  { href: "/employees", label: "社員一覧", description: "人材データを管理" },
-  { href: "/annual-events", label: "年間イベント", description: "重要日程を把握" },
-  { href: "/notifications", label: "通知", description: "最新アラートを確認" },
+  { href: "/login", label: "ログイン", description: "セキュアにサインイン", accent: "#60a5fa" },
+  { href: "/dashboard", label: "ダッシュボード", description: "全体状況を俯瞰", accent: "#818cf8" },
+  { href: "/employees", label: "社員一覧", description: "人材データを管理", accent: "#22d3ee" },
+  { href: "/annual-events", label: "年間イベント", description: "重要日程を把握", accent: "#38bdf8" },
+  { href: "/notifications", label: "通知", description: "最新アラートを確認", accent: "#c084fc" },
 ];
 
 export default function HomePage() {
   return (
-    <main className="min-h-dvh bg-[radial-gradient(circle_at_top_right,_#6366f1_0%,_#f8fafc_42%,_#e2e8f0_100%)] px-6 py-16">
-      <div className="mx-auto max-w-5xl">
-        <section className="rounded-3xl border border-white/60 bg-white/75 p-10 shadow-2xl shadow-indigo-900/10 backdrop-blur-lg">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-indigo-600">Smart HR Workspace</p>
-          <h1 className="mt-4 text-4xl font-bold tracking-tight text-slate-900">Talent Management</h1>
-          <p className="mt-4 max-w-2xl text-slate-600">
+    <main
+      style={{
+        minHeight: "100dvh",
+        padding: "58px 24px",
+        background:
+          "radial-gradient(circle at 8% 8%, rgba(56, 189, 248, 0.25), transparent 24%), radial-gradient(circle at 92% 12%, rgba(99, 102, 241, 0.28), transparent 30%), linear-gradient(165deg, #eef2ff, #f8fafc 45%, #e2e8f0)",
+      }}
+    >
+      <div style={{ margin: "0 auto", maxWidth: 1080 }}>
+        <Card variant="elevated" style={{ borderRadius: 34, padding: 40 }}>
+          <p style={{ margin: 0, fontSize: 12, letterSpacing: "0.22em", fontWeight: 800, color: "#4f46e5" }}>
+            SMART HR WORKSPACE
+          </p>
+          <h1 style={{ margin: "10px 0 0", fontSize: 56, lineHeight: 1, color: "#0f172a" }}>Talent Management</h1>
+          <CardText style={{ marginTop: 18, maxWidth: 720, fontSize: 17, lineHeight: 1.7 }}>
             人材情報・面談・フォローアップを横断して管理できる、洗練されたワークスペースです。
             KPIや通知を直感的に確認し、次のアクションへスムーズに進めます。
-          </p>
+          </CardText>
 
-          <section className="mt-10">
-            <h2 className="text-lg font-semibold text-slate-900">クイックアクセス</h2>
-            <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <section style={{ marginTop: 34 }}>
+            <CardTitle style={{ fontSize: 31 }}>クイックアクセス</CardTitle>
+            <ul
+              style={{
+                listStyle: "none",
+                margin: "20px 0 0",
+                padding: 0,
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: 14,
+              }}
+            >
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="group block rounded-2xl border border-slate-200/70 bg-white/80 px-5 py-4 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg"
-                  >
-                    <div className="text-sm font-semibold text-slate-900 transition group-hover:text-indigo-700">
-                      {link.label}
-                    </div>
-                    <div className="mt-1 text-xs text-slate-500">{link.description}</div>
+                  <Link href={link.href} style={{ textDecoration: "none" }}>
+                    <Card
+                      style={{
+                        padding: "16px 18px",
+                        borderRadius: 18,
+                        border: `1px solid ${link.accent}44`,
+                        background: `linear-gradient(145deg, #ffffff, ${link.accent}15)`,
+                        boxShadow: "0 10px 24px rgba(15, 23, 42, 0.1)",
+                      }}
+                    >
+                      <div style={{ fontSize: 16, fontWeight: 800, color: "#0f172a" }}>{link.label}</div>
+                      <div style={{ marginTop: 4, fontSize: 13, color: "#475569" }}>{link.description}</div>
+                    </Card>
                   </Link>
                 </li>
               ))}
             </ul>
           </section>
-        </section>
+        </Card>
       </div>
     </main>
   );

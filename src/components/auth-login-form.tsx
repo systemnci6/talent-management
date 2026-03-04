@@ -1,8 +1,12 @@
 export function AuthLoginForm({ errorMessage }: { errorMessage: string | null }) {
   return (
-    <form className="mt-8 space-y-5" action="/api/auth/login" method="post">
+    <form
+      style={{ marginTop: 28, display: "grid", gap: 18 }}
+      action="/api/auth/login"
+      method="post"
+    >
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="email" style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#dbeafe" }}>
           メールアドレス
         </label>
         <input
@@ -11,13 +15,24 @@ export function AuthLoginForm({ errorMessage }: { errorMessage: string | null })
           type="email"
           autoComplete="email"
           required
-          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
           placeholder="you@example.com"
+          style={{
+            marginTop: 8,
+            width: "100%",
+            boxSizing: "border-box",
+            borderRadius: 12,
+            border: "1px solid rgba(191, 219, 254, 0.45)",
+            background: "rgba(15, 23, 42, 0.45)",
+            padding: "11px 13px",
+            fontSize: 14,
+            color: "#f8fafc",
+            outline: "none",
+          }}
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="password" style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#dbeafe" }}>
           パスワード
         </label>
         <input
@@ -27,20 +42,52 @@ export function AuthLoginForm({ errorMessage }: { errorMessage: string | null })
           autoComplete="current-password"
           required
           minLength={8}
-          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
           placeholder="********"
+          style={{
+            marginTop: 8,
+            width: "100%",
+            boxSizing: "border-box",
+            borderRadius: 12,
+            border: "1px solid rgba(191, 219, 254, 0.45)",
+            background: "rgba(15, 23, 42, 0.45)",
+            padding: "11px 13px",
+            fontSize: 14,
+            color: "#f8fafc",
+            outline: "none",
+          }}
         />
       </div>
 
       {errorMessage ? (
-        <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p
+          style={{
+            borderRadius: 12,
+            border: "1px solid rgba(248, 113, 113, 0.6)",
+            background: "rgba(127, 29, 29, 0.55)",
+            margin: 0,
+            padding: "10px 12px",
+            fontSize: 13,
+            color: "#fecaca",
+          }}
+        >
           {errorMessage}
         </p>
       ) : null}
 
       <button
         type="submit"
-        className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+        style={{
+          width: "100%",
+          borderRadius: 12,
+          border: "none",
+          background: "linear-gradient(120deg, #6366f1, #0ea5e9)",
+          color: "white",
+          fontWeight: 700,
+          padding: "12px 16px",
+          fontSize: 14,
+          cursor: "pointer",
+          boxShadow: "0 14px 34px rgba(14, 165, 233, 0.35)",
+        }}
       >
         ログイン
       </button>

@@ -2,13 +2,35 @@ import { Me } from "@/types/api";
 
 export function AppHeader({ me }: { me: Me }) {
   return (
-    <header className="sticky top-0 z-20 border-b border-white/40 bg-white/75 px-6 py-4 backdrop-blur-xl">
-      <div className="flex items-center justify-between">
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 20,
+        padding: "18px 28px",
+        borderBottom: "1px solid rgba(148, 163, 184, 0.35)",
+        background: "rgba(255, 255, 255, 0.82)",
+        backdropFilter: "blur(8px)",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-indigo-500">Talent Management</p>
-          <h1 className="mt-1 text-lg font-semibold text-slate-900">人材マネジメントポータル</h1>
+          <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: "0.24em", color: "#4f46e5" }}>
+            TALENT MANAGEMENT
+          </p>
+          <h1 style={{ margin: "6px 0 0", fontSize: 20, color: "#0f172a" }}>人材マネジメントポータル</h1>
         </div>
-        <div className="rounded-full border border-indigo-100 bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-700 shadow-sm">
+        <div
+          style={{
+            borderRadius: 999,
+            border: "1px solid #c7d2fe",
+            background: "linear-gradient(145deg, #eef2ff, #dbeafe)",
+            padding: "8px 16px",
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#3730a3",
+          }}
+        >
           {me.role}
         </div>
       </div>

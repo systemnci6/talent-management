@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { AuthLoginForm } from "@/components/auth-login-form";
+import { Card, CardText } from "@/components/ui/card";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const errorMessages: Record<string, string> = {
   missing: "メールアドレスとパスワードを入力してください。",
@@ -27,14 +28,29 @@ export default async function LoginPage({
   const errorMessage = errorKey ? errorMessages[errorKey] ?? null : null;
 
   return (
-    <main className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-slate-950 px-4 py-12">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(99,102,241,0.35),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(56,189,248,0.3),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(168,85,247,0.3),transparent_45%)]" />
-      <section className="relative w-full max-w-md rounded-3xl border border-white/20 bg-white/10 p-8 shadow-2xl shadow-black/40 backdrop-blur-xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-indigo-200">Welcome back</p>
-        <h1 className="mt-3 text-3xl font-bold text-white">Talent Management</h1>
-        <p className="mt-2 text-sm text-slate-200">アカウント情報を入力してログインしてください。</p>
+    <main
+      style={{
+        minHeight: "100dvh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 16,
+        background:
+          "radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.45), transparent 30%), radial-gradient(circle at 80% 5%, rgba(14, 165, 233, 0.4), transparent 30%), radial-gradient(circle at 85% 80%, rgba(168, 85, 247, 0.35), transparent 40%), linear-gradient(145deg, #020617, #0f172a)",
+      }}
+    >
+      <Card variant="dark" style={{ width: "100%", maxWidth: 480, borderRadius: 28, padding: 34 }}>
+        <p style={{ margin: 0, fontSize: 12, letterSpacing: "0.22em", fontWeight: 700, color: "#93c5fd" }}>WELCOME BACK</p>
+        <h1 style={{ margin: "14px 0 0", fontSize: 44, lineHeight: 1.1, color: "#f8fafc" }}>
+          Talent
+          <br />
+          Management
+        </h1>
+        <CardText style={{ marginTop: 14, fontSize: 14, color: "#cbd5e1" }}>
+          アカウント情報を入力してログインしてください。
+        </CardText>
         <AuthLoginForm errorMessage={errorMessage} />
-      </section>
+      </Card>
     </main>
   );
 }

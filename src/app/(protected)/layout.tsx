@@ -8,12 +8,19 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
   const me = await requireAuth(); // { userId, employeeId, role, scopes... }
 
   return (
-    <div className="flex min-h-dvh bg-gradient-to-br from-slate-100 via-white to-indigo-100">
+    <div
+      style={{
+        minHeight: "100dvh",
+        display: "flex",
+        background:
+          "radial-gradient(circle at 10% 10%, rgba(79, 70, 229, 0.16), transparent 28%), radial-gradient(circle at 90% 0%, rgba(14, 165, 233, 0.17), transparent 24%), linear-gradient(160deg, #eef2ff, #f8fafc 50%, #e2e8f0)",
+      }}
+    >
       <AppSidebar me={me} />
-      <div className="flex flex-1 flex-col">
+      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <AppHeader me={me} />
-        <main className="flex-1 p-6 lg:p-8">
-          <div className="mx-auto w-full max-w-7xl">{children}</div>
+        <main style={{ flex: 1, padding: 28 }}>
+          <div style={{ margin: "0 auto", width: "100%", maxWidth: 1240 }}>{children}</div>
         </main>
       </div>
     </div>
