@@ -22,3 +22,11 @@ export function createBrowserClient(
 ): SupabaseClient {
   return createClient(supabaseUrl, supabaseKey, options);
 }
+
+export function createServerClient(
+  supabaseUrl: string,
+  supabaseKey: string,
+  options?: ClientOptions
+): SupabaseClient {
+  return createClient(supabaseUrl, supabaseKey, options);
+}
