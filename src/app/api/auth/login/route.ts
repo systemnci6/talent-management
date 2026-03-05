@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase/ssr";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase/env";
 
+const ACCESS_TOKEN_COOKIE = "tm-access-token";
+const REFRESH_TOKEN_COOKIE = "tm-refresh-token";
+
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const email = String(formData.get("email") ?? "").trim();
@@ -11,26 +14,31 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(new URL("/login?error=missing", request.url), { status: 303 });
   }
 
+  const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error || !data.session) {
+    return NextResponse.redirect(new URL("/login?error=invalid", request.url), { status: 303 });
+  }
+
+
   const response = NextResponse.redirect(new URL("/dashboard", request.url), { status: 303 });
-  const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          request.cookies.set(name, value);
-          response.cookies.set(name, value, options);
-        });
-      },
-    },
+
+  response.cookies.set(ACCESS_TOKEN_COOKIE, data.session.access_token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: data.session.expires_in,
   });
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    response.headers.set("location", new URL("/login?error=invalid", request.url).toString());
-  }
+  response.cookies.set(REFRESH_TOKEN_COOKIE, data.session.refresh_token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+  });
 
   return response;
 }
